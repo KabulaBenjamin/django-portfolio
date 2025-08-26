@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home – My Portfolio{% endblock %}
+
+{% block content %}
+  {% include 'projects/partials/_hero.html' %}
+  {% include 'projects/partials/_project_list.html' %}
+  {% include 'projects/partials/_youtube_feed.html' %}
+  {% include 'projects/partials/_contact.html' %}
+{% endblock %}

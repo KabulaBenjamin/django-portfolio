@@ -1,0 +1,31 @@
+<section id="projects" class="home-projects">
+  {% if projects %}
+    <div class="project-grid">
+      {% for project in projects %}
+        <article class="project-card">
+          {% if project.images.first %}
+            <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
+          {% else %}
+            <div class="placeholder-image">No Image</div>
+          {% endif %}
+          <div class="project-content">
+            <h3>{{ project.title }}</h3>
+            <span class="category">{{ project.get_category_display }}</span>
+            <p>{{ project.description|truncatechars:80 }}</p>
+            <div class="project-links">
+              <a href="{% url 'project_detail' project.slug %}" class="btn">View Details</a>
+              {% if project.github_link %}
+                <a href="{{ project.github_link }}" target="_blank" class="btn">GitHub</a>
+              {% endif %}
+              {% if project.live_demo %}
+                <a href="{{ project.live_demo }}" target="_blank" class="btn">Live Demo</a>
+              {% endif %}
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="no-projects">No projects yet.</p>
+  {% endif %}
+</section>

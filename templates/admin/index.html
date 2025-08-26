@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{{ site_header|default:_('Site administration') }}</h1>
+
+  {% for app in app_list %}
+    <div class="app-{{ app.app_label }}">
+      <h2>{{ app.name }}</h2>
+      <ul class="model-list">
+        {% for model in app.models %}
+          <li>
+            {# “Change” takes you to /admin/app_label/model/ #}
+            {% if model.perms.change %}
+              <a href="{{ model.admin_url }}">{{ model.name }}</a>
+            {% endif %}
+
+            {# “Add” takes you to /admin/app_label/model/add/ #}
+            {% if model.perms.add %}
+              | <a href="{{ model.add_url }}">{{ _('Add') }}</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+{% endblock %}

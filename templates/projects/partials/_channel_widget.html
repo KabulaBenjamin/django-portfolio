@@ -1,0 +1,22 @@
+<section id="channel" class="channel-widget">
+  <h2>My YouTube Channel</h2>
+ <section id="youtube-feed" class="yt-feed">
+  <h2>Latest YouTube Videos</h2>
+  <div class="video-grid">
+    {% for vid in youtube_videos %}
+      <div class="video-card">
+        <iframe
+          src="https://www.youtube.com/embed/{{ vid.video_id }}"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+        <h3>{{ vid.title }}</h3>
+      </div>
+    {% empty %}
+      <p>No videos found.</p>
+    {% endfor %}
+  </div>
+</section>
+</section>

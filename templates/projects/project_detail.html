@@ -1,0 +1,18 @@
+{% for vid in videos %}
+  {% if vid.youtube_url %}
+    <div class="yt-embed">
+      <iframe
+        src="https://www.youtube.com/embed/{{ vid.youtube_url|slice:'-11:' }}"
+        title="{{ project.title }} demo"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+  {% elif vid.video %}
+    <video controls class="local-video">
+      <source src="{{ vid.video.url }}" type="video/mp4">
+      Your browser doesn’t support HTML5 video.
+    </video>
+  {% endif %}
+{% endfor %}

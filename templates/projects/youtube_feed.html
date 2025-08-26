@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Latest YouTube Videos – My Portfolio{% endblock %}
+
+{% block content %}
+<section id="youtube-feed" class="yt-feed">
+  <h2>Latest YouTube Videos</h2>
+
+  <div class="video-grid">
+    {% for vid in youtube_videos %}
+      <div class="video-card">
+        <iframe
+          src="https://www.youtube.com/embed/{{ vid.video_id }}"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+        <h3>{{ vid.title }}</h3>
+      </div>
+    {% empty %}
+      <p>No videos available at the moment. Check back soon!</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

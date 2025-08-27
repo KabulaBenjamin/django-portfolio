@@ -19,8 +19,8 @@ config   = Config(RepositoryEnv(env_file))
 # -----------------------------------------------------------------------------
 # SECURITY & DEBUG
 # -----------------------------------------------------------------------------
-SECRET_KEY   = config('DJANGO_SECRET_KEY', default='',       cast=str)
-DEBUG        = config('DJANGO_DEBUG',      default=False,    cast=bool)
+SECRET_KEY   = config('DJANGO_SECRET_KEY',    default='',    cast=str)
+DEBUG        = config('DJANGO_DEBUG',         default=False, cast=bool)
 ALLOWED_HOSTS = config(
     'DJANGO_ALLOWED_HOSTS',
     default='localhost,127.0.0.1',
@@ -97,8 +97,8 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 # -----------------------------------------------------------------------------
 DATABASES = {
     'default': {
-        'ENGINE':   'django.db.backends.sqlite3',
-        'NAME':     BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME':   BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -121,10 +121,15 @@ USE_I18N      = True
 USE_TZ        = True
 
 # -----------------------------------------------------------------------------
-# STATIC FILES
+# STATIC FILES (CSS, JS, images)
 # -----------------------------------------------------------------------------
-STATIC_URL          = '/static/'
-STATICFILES_DIRS    = [BASE_DIR / 'static']
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    # only the top-level static/ folder in your repo root
+    REPO_ROOT / 'static',
+]
+
 STATIC_ROOT         = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

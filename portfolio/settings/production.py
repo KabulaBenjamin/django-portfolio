@@ -3,55 +3,52 @@
 import os
 from .base import *
 
+# -------------------------------------------------------------------------
 # SECURITY
-# Pull your SECRET_KEY from the WSGI env var we set
+# -------------------------------------------------------------------------
+
+# Secret key must be set in the environment (PythonAnywhere Web tab or OS env)
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+
+# Never run with debug turned on in production!
 DEBUG = False
 
-# Allow PythonAnywhere subdomain and any custom domains you add
-ALLOWED_HOSTS = [
-    'benjakabula.pythonanywhere.com',
-    # 'www.kabulabenjamin.dev',
-    # 'kabulabenjamin.dev',
-]
+# Hosts/domain names that are valid for this site
+# Example: "benjakabula.pythonanywhere.com"
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
 
-# DATABASE
-# Using SQLite on PythonAnywhere; adjust if you switch to Postgres
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# -------------------------------------------------------------------------
+# DATABASE (override if you’re using a production database)
+# -------------------------------------------------------------------------
+# DATABASES = {
+#     'default': {
+#         'ENGINE':   'django.db.backends.postgresql',
+#         'NAME':     os.environ['DB_NAME'],
+#         'USER':     os.environ['DB_USER'],
+#         'PASSWORD': os.environ['DB_PASSWORD'],
+#         'HOST':     os.environ.get('DB_HOST', 'localhost'),
+#         'PORT':     os.environ.get('DB_PORT', ''),
+#     }
+# }
 
+# -------------------------------------------------------------------------
 # STATIC & MEDIA
-# collectstatic will dump here; PythonAnywhere will serve /static/ from this folder
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# -------------------------------------------------------------------------
+# Use WhiteNoise for static file serving
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# If you’re using django-whitenoise, uncomment this
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# (STATIC_URL, STATIC_ROOT, MEDIA_URL, MEDIA_ROOT all inherited from base.py)
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-# MIDDLEWARE tweak if using Whitenoise (insert near top, just after SecurityMiddleware)
-# MIDDLEWARE.insert(
-#     MIDDLEWARE.index('django.middleware.security.SecurityMiddleware') + 1,
-#     'whitenoise.middleware.WhiteNoiseMiddleware'
-# )
-
-# EMAIL (customize SMTP host/creds via env vars if you send mail)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = 'no-reply@benjakabula.pythonanywhere.com'
-EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
-EMAIL_PORT = os.environ.get('EMAIL_PORT', '')
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-
+# -------------------------------------------------------------------------
 # YOUTUBE INTEGRATION
-YOUTUBE_API_KEY = os.environ['YOUTUBE_API_KEY']
-YOUTUBE_CHANNEL_ID = os.environ['YOUTUBE_CHANNEL_ID']
+# -------------------------------------------------------------------------
+YOUTUBE_API_KEY    = os.environ.get('YOUTUBE_API_KEY', '')
+YOUTUBE_CHANNEL_ID = os.environ.get('YOUTUBE_CHANNEL_ID', '')
 
-# Any additional production tweaks go here...
+# -------------------------------------------------------------------------
+# OPTIONAL: Additional production-only settings
+# -------------------------------------------------------------------------
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# X_FRAME_OPTIONS = 'DENY'

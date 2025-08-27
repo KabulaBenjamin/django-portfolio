@@ -1,6 +1,21 @@
+```python
+# projects/views.py
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Project, ProjectImage, ProjectVideo, YouTubeVideo
 from .forms import ProjectForm
+
+# Reusable contact/social info
+CONTACT_INFO = {
+    'phone1': '+254787978403',
+    'phone2': '+254798030091',
+    'github': 'https://github.com/KabulaBenjamin',
+    'linkedin': 'https://linkedin.com/in/koikoi-benjamin-2b9370162',
+    'email': 'kabulabenjamin25@gmail.com',
+    'twitter': 'https://twitter.com/koikoibenjamin',
+    'facebook': 'https://facebook.com/koikoi.benjamin',
+}
+
 
 def home(request):
     """
@@ -10,16 +25,13 @@ def home(request):
     projects = Project.objects.all()
     youtube_videos = YouTubeVideo.objects.order_by('-published_at')[:5]
 
+    # DEBUG: log how many videos we fetched
+    print(f"DEBUG [home]: found {youtube_videos.count()} YouTube videos")
+
     context = {
         'projects': projects,
         'youtube_videos': youtube_videos,
-        'phone1': '+254787978403',
-        'phone2': '+254798030091',
-        'github': 'https://github.com/KabulaBenjamin',
-        'linkedin': 'https://linkedin.com/in/koikoi-benjamin-2b9370162',
-        'email': 'kabulabenjamin25@gmail.com',
-        'twitter': 'https://twitter.com/koikoibenjamin',
-        'facebook': 'https://facebook.com/koikoi.benjamin',
+        **CONTACT_INFO,
     }
     return render(request, 'projects/home.html', context)
 
@@ -36,6 +48,9 @@ def project_list(request):
 
 
 def project_detail(request, pk):
+    """
+    Detail view for a single project, with its images and videos.
+    """
     project = get_object_or_404(Project, pk=pk)
     images = project.images.all()
     videos = project.videos.all()
@@ -47,6 +62,9 @@ def project_detail(request, pk):
 
 
 def add_project(request):
+    """
+    Create a new project, handling image & video uploads.
+    """
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
@@ -65,23 +83,29 @@ def add_project(request):
 
 
 def contact(request):
-    return render(request, 'projects/contact.html', {
-        'phone1': '+254787978403',
-        'phone2': '+254798030091',
-        'github': 'https://github.com/KabulaBenjamin',
-        'linkedin': 'https://linkedin.com/in/koikoi-benjamin-2b9370162',
-        'email': 'kabulabenjamin25@gmail.com',
-        'twitter': 'https://twitter.com/koikoibenjamin',
-        'facebook': 'https://facebook.com/koikoi.benjamin',
-    })
+    """
+    Contact page (or contact block on home).
+    """
+    return render(request, 'projects/contact.html', CONTACT_INFO)
 
 
 def privacy_policy(request):
+    """
+    Privacy policy page.
+    """
     return render(request, 'projects/privacy.html')
 
 
 def youtube_feed(request):
+    """
+    Standalone view for YouTube videos feed.
+    """
     videos = YouTubeVideo.objects.order_by('-published_at')[:5]
+
+    # DEBUG: log how many videos we're passing to the template
+    print(f"DEBUG [youtube_feed]: found {videos.count()} YouTube videos")
+
     return render(request, 'projects/youtube_feed.html', {
         'videos': videos
     })
+```

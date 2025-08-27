@@ -2,7 +2,7 @@
 
 from .base import *
 
-SECRET_KEY = 'your-dev-secret-key'
+SECRET_KEY = 'nwvU0z9kZ8TjQvJl2hFcvROGebZdEF_H'
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 

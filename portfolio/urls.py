@@ -10,31 +10,27 @@ from projects.sitemaps import StaticViewSitemap, ProjectSitemap, VideoSitemap
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('projects.urls')),
-]
-
-if settings.DEBUG:
-    # Serve uploaded media files
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT
-    )
-    # Serve your CSS/JS/images directly from <project_root>/static/
-    urlpatterns += static(
-        settings.STATIC_URL,
-        document_root=BASE_DIR / 'static'
-    )
-
-
+# Define your sitemaps
 sitemaps = {
     "static": StaticViewSitemap,
     "projects": ProjectSitemap,
     "videos": VideoSitemap,
 }
 
+# Core URL patterns
 urlpatterns = [
-    # ... existing patterns ...
+    path("admin/", admin.site.urls),
+    path("", include("projects.urls")),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
 ]
+
+# Serve media & static in DEBUG mode
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT,
+    )
+    urlpatterns += static(
+        settings.STATIC_URL,
+        document_root=BASE_DIR / "static",
+    )

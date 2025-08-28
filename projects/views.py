@@ -34,10 +34,17 @@ def home(request):
 
 
 def project_list(request):
-    """Standalone projects list page."""
+    """
+    Standalone projects list page.
+    """
     projects = Project.objects.all()
+    # Fetch latest 5 YouTube videos too
+    youtube_videos = YouTubeVideo.objects.order_by('-published_at')[:5]
+
     return render(request, 'projects/project_list.html', {
-        'projects': projects
+        'projects': projects,
+        'youtube_videos': youtube_videos,
+        **CONTACT_INFO,
     })
 
 
@@ -83,7 +90,7 @@ def privacy_policy(request):
 
 
 def youtube_feed(request):
-    """Standalone YouTube‐feed page (if you ever need it)."""
+    """Standalone YouTube-feed page (if you ever need it)."""
     youtube_videos = YouTubeVideo.objects.order_by('-published_at')[:5]
     print(f"DEBUG [youtube_feed]: found {youtube_videos.count()} YouTube videos")
     return render(request, 'projects/youtube_feed.html', {

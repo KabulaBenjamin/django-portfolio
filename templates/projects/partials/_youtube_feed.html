@@ -1,19 +1,25 @@
+{# templates/projects/partials/_youtube_feed.html #}
+
+<!-- DEBUG in partial: sees {{ youtube_videos|length }} videos -->
 <section id="youtube-feed" class="yt-feed">
   <h2>Latest YouTube Videos</h2>
+
   <div class="video-grid">
     {% for vid in youtube_videos %}
       <div class="video-card">
-        <iframe
-          src="https://www.youtube.com/embed/{{ vid.video_id }}"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          loading="lazy"
-        ></iframe>
-        <h4>{{ vid.title }}</h4>
+        <div class="yt-embed">
+          <iframe
+            src="https://www.youtube.com/embed/{{ vid.video_id }}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+        <h3>{{ vid.title }}</h3>
       </div>
     {% empty %}
-      <p>No videos available.</p>
+      <p>No videos available at the moment. Check back soon!</p>
     {% endfor %}
   </div>
 </section>

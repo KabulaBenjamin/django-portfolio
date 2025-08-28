@@ -1,39 +1,62 @@
+{# templates/projects/project_list.html #}
+
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Home – My Portfolio{% endblock %}
+{% block title %}Projects – My Portfolio{% endblock %}
 
 {% block content %}
 
-<!-- Hero Section -->
-<section id="hero" class="hero">
-  <h2>Welcome to My Portfolio</h2>
-  <p>Explore my work and projects below.</p>
-</section>
-
 <!-- Projects Section -->
-<section id="projects" class="home-projects">
+<section id="projects" class="project-list">
+  <h1>All Projects</h1>
+
   {% if projects %}
     <div class="project-grid">
       {% for project in projects %}
         <article class="project-card">
           {% if project.images.first %}
-            <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
+            <img
+              src="{{ project.images.first.image.url }}"
+              alt="{{ project.title }}"
+            />
           {% else %}
             <div class="placeholder-image">No Image</div>
           {% endif %}
+
           <div class="project-content">
             <h3>{{ project.title }}</h3>
             <span class="category">{{ project.get_category_display }}</span>
             <p>{{ project.description|truncatechars:80 }}</p>
+
             <div class="project-links">
-              <a href="{% url 'project_detail' project.slug %}" class="btn">View Details</a>
+              <a
+                href="{% url 'project_detail' project.slug %}"
+                class="btn"
+              >
+                View Details
+              </a>
+
               {% if project.github_link %}
-                <a href="{{ project.github_link }}" target="_blank" class="btn">GitHub</a>
+                <a
+                  href="{{ project.github_link }}"
+                  target="_blank"
+                  class="btn"
+                >
+                  GitHub
+                </a>
               {% endif %}
+
               {% if project.live_demo %}
-                <a href="{{ project.live_demo }}" target="_blank" class="btn">Live Demo</a>
+                <a
+                  href="{{ project.live_demo }}"
+                  target="_blank"
+                  class="btn"
+                >
+                  Live Demo
+                </a>
               {% endif %}
+
               {% if request.user.is_superuser %}
                 <a
                   href="{% url 'admin:projects_project_change' project.id %}"
@@ -48,50 +71,42 @@
       {% endfor %}
     </div>
   {% else %}
-    <p class="no-projects">No projects yet.</p>
+    <p class="no-projects">No projects available yet.</p>
   {% endif %}
 </section>
 
-<!-- YouTube Feed Section -->
+
+<!-- DEBUG: project_list sees {{ youtube_videos|length }} videos -->
 <section id="youtube-feed" class="yt-feed">
   <h2>Latest YouTube Videos</h2>
+
   <div class="video-grid">
     {% for vid in youtube_videos %}
       <div class="video-card">
-        <iframe
-          src="https://www.youtube.com/embed/{{ vid.video_id }}"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          loading="lazy"
-        ></iframe>
-        <h4>{{ vid.title }}</h4>
+        <div class="yt-embed">
+          <iframe
+            src="https://www.youtube.com/embed/{{ vid.video_id }}"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+        <h3>{{ vid.title }}</h3>
 
         {% if request.user.is_superuser %}
           <a
+            href="{% url 'admin:projects_youtubevideo_change' vid.id %}"
             class="btn btn-sm edit-btn"
-            href="{% url 'admin:projects_projectvideo_change' vid.id %}"
           >
             Edit Video
           </a>
         {% endif %}
       </div>
     {% empty %}
-      <p>No videos available.</p>
+      <p>No videos available at the moment. Check back soon!</p>
     {% endfor %}
   </div>
-</section>
-
-<!-- Contact Section -->
-<section id="contact" class="home-contact">
-  <h2>Contact Me</h2>
-  <p>
-    Email:
-    <a href="mailto:kabulabenjamin25@gmail.com">
-      kabulabenjamin25@gmail.com
-    </a>
-  </p>
-  <p>Feel free to reach out for collaborations or inquiries.</p>
 </section>
 
 {% endblock %}

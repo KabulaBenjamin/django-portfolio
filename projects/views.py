@@ -1,4 +1,3 @@
-```python
 # projects/views.py
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -99,13 +98,13 @@ def privacy_policy(request):
 def youtube_feed(request):
     """
     Standalone view for YouTube videos feed.
+    Now uses the 'youtube_videos' context key to match your templates.
     """
-    videos = YouTubeVideo.objects.order_by('-published_at')[:5]
+    youtube_videos = YouTubeVideo.objects.order_by('-published_at')[:5]
 
     # DEBUG: log how many videos we're passing to the template
-    print(f"DEBUG [youtube_feed]: found {videos.count()} YouTube videos")
+    print(f"DEBUG [youtube_feed]: found {youtube_videos.count()} YouTube videos")
 
     return render(request, 'projects/youtube_feed.html', {
-        'videos': videos
+        'youtube_videos': youtube_videos
     })
-```

@@ -1,25 +1,10 @@
-{# templates/projects/project_list.html #}
-
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Projects – My Portfolio{% endblock %}
-
-{% block content %}
-
-<!-- Projects Section -->
-<section id="projects" class="project-list">
-  <h1>All Projects</h1>
-
+<section id="projects" class="home-projects">
   {% if projects %}
     <div class="project-grid">
       {% for project in projects %}
         <article class="project-card">
           {% if project.images.first %}
-            <img
-              src="{{ project.images.first.image.url }}"
-              alt="{{ project.title }}"
-            />
+            <img src="{{ project.images.first.image.url }}" alt="{{ project.title }}">
           {% else %}
             <div class="placeholder-image">No Image</div>
           {% endif %}
@@ -30,40 +15,14 @@
             <p>{{ project.description|truncatechars:80 }}</p>
 
             <div class="project-links">
-              <a
-                href="{% url 'project_detail' project.slug %}"
-                class="btn"
-              >
+              <a href="{% url 'project_detail' project.pk %}" class="btn">
                 View Details
               </a>
-
               {% if project.github_link %}
-                <a
-                  href="{{ project.github_link }}"
-                  target="_blank"
-                  class="btn"
-                >
-                  GitHub
-                </a>
+                <a href="{{ project.github_link }}" target="_blank" class="btn">GitHub</a>
               {% endif %}
-
               {% if project.live_demo %}
-                <a
-                  href="{{ project.live_demo }}"
-                  target="_blank"
-                  class="btn"
-                >
-                  Live Demo
-                </a>
-              {% endif %}
-
-              {% if request.user.is_superuser %}
-                <a
-                  href="{% url 'admin:projects_project_change' project.id %}"
-                  class="btn btn-sm edit-btn"
-                >
-                  Edit
-                </a>
+                <a href="{{ project.live_demo }}" target="_blank" class="btn">Live Demo</a>
               {% endif %}
             </div>
           </div>
@@ -71,42 +30,6 @@
       {% endfor %}
     </div>
   {% else %}
-    <p class="no-projects">No projects available yet.</p>
+    <p class="no-projects">No projects yet.</p>
   {% endif %}
 </section>
-
-
-<!-- DEBUG: project_list sees {{ youtube_videos|length }} videos -->
-<section id="youtube-feed" class="yt-feed">
-  <h2>Latest YouTube Videos</h2>
-
-  <div class="video-grid">
-    {% for vid in youtube_videos %}
-      <div class="video-card">
-        <div class="yt-embed">
-          <iframe
-            src="https://www.youtube.com/embed/{{ vid.video_id }}"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-          ></iframe>
-        </div>
-        <h3>{{ vid.title }}</h3>
-
-        {% if request.user.is_superuser %}
-          <a
-            href="{% url 'admin:projects_youtubevideo_change' vid.id %}"
-            class="btn btn-sm edit-btn"
-          >
-            Edit Video
-          </a>
-        {% endif %}
-      </div>
-    {% empty %}
-      <p>No videos available at the moment. Check back soon!</p>
-    {% endfor %}
-  </div>
-</section>
-
-{% endblock %}
